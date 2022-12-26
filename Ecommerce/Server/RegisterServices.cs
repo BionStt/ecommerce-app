@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Ecommerce.Server.Services.ProductService;
 
 namespace Ecommerce.Server;
 
@@ -14,5 +14,6 @@ public static class RegisterServices
         builder.Services.AddRazorPages();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddScoped<IProductService, ProductService>();
     }
 }
