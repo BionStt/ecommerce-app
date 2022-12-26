@@ -1,6 +1,4 @@
-﻿using Ecommerce.Server.Services.ProductService;
-
-namespace Ecommerce.Server;
+﻿namespace Ecommerce.Server;
 
 public static class RegisterServices
 {
@@ -15,5 +13,6 @@ public static class RegisterServices
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
     }
 }
