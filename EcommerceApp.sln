@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Server", "Ecommerce\Server\Ecommerce.Server.csproj", "{02234D85-DB7E-4DBA-AD82-C4E3DE395F32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Server", "Ecommerce\Server\Ecommerce.Server.csproj", "{02234D85-DB7E-4DBA-AD82-C4E3DE395F32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Client", "Ecommerce\Client\Ecommerce.Client.csproj", "{FB00D375-06E8-4B4D-B117-B352AFAB1BF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Client", "Ecommerce\Client\Ecommerce.Client.csproj", "{FB00D375-06E8-4B4D-B117-B352AFAB1BF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Shared", "Ecommerce\Shared\Ecommerce.Shared.csproj", "{76255774-7BDB-4BA7-A9DD-371E1BBB68A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Shared", "Ecommerce\Shared\Ecommerce.Shared.csproj", "{76255774-7BDB-4BA7-A9DD-371E1BBB68A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
