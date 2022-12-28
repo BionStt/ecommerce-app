@@ -56,7 +56,7 @@ public class ProductService : IProductService
     {
         var products = await FindProductsBySearchText(searchText);
 
-        List<string> result = new List<string>();
+        List<string> result = new();
 
         foreach (var product in products)
         {

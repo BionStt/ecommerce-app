@@ -9,7 +9,7 @@ public class CategoryService : ICategoryService
         _http = http;
     }
     
-    public List<Category> Categories { get; set; } = new List<Category>();
+    public List<Category> Categories { get; set; } = new();
 
     public async Task GetCategories()
     {
