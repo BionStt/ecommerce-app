@@ -28,16 +28,16 @@ namespace Ecommerce.Server.Controllers
         }
 
         [HttpGet("category/{categoryUrl}")]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductsByCategory(string categoryUrl)
+        public async Task<ActionResult<ServiceResponse<ProductSearchResultDTO>>> GetProductsByCategory(string categoryUrl)
         {
             var result = await _productService.GetProductsByCategory(categoryUrl);
             return Ok(result);
         }
 
-        [HttpGet("search/{searchText}")]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> SearchProducts(string searchText)
+        [HttpGet("search/{searchText}/{page}")]
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> SearchProducts(string searchText, int page = 1)
         {
-            var result = await _productService.SearchProducts(searchText);
+            var result = await _productService.SearchProducts(searchText, page);
             return Ok(result);
         }
 

@@ -11,10 +11,13 @@ public class ProductService : IProductService
         _http = http;
     }
     
-    public List<Product> Products { get; set; } = new();
-    public string Message { get; set; } = "Loading products...";
+    public List<Product> products { get; set; } = new();
+    public string message { get; set; } = "Loading products...";
 
     public event Action ProductsChanged;
+    public int currentPage { get; set; } = 1;
+    public int pageCount { get; set; } = 0;
+    public string lastSearchText { get; set; } = string.Empty;
 
     public async Task<ServiceResponse<Product>> GetProduct(int productId)
     {
@@ -29,9 +32,17 @@ public class ProductService : IProductService
             await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/category/{categoryUrl}");
         if (result != null && result.Data != null)
         {
-            Products = result.Data;
-        }     
-        
+            products = result.Data;
+        }
+
+        currentPage = 1;
+        pageCount = 0;
+
+        if (products.Count == 0)
+        {
+            message = "No products found";
+        }
+
         ProductsChanged.Invoke();
     }
 
@@ -41,16 +52,19 @@ public class ProductService : IProductService
         return result.Data;
     }
 
-    public async Task SearchProducts(string searchText)
+    public async Task SearchProducts(string searchText, int page)
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/search/{searchText}");
+        lastSearchText = searchText;
+        var result = await _http.GetFromJsonAsync<ServiceResponse<ProductSearchResultDTO>>($"api/product/search/{searchText}/{page}");
         if (result != null && result.Data != null)
         {
-            Products = result.Data;
+            products = result.Data.Products;
+            currentPage = result.Data.CurrentPage;
+            pageCount = result.Data.Pages;
         }           
-        if (Products.Count == 0)
+        if (products.Count == 0)
         {
-            Message = "No products found.";
+            message = "No products found.";
         }    
         
         ProductsChanged.Invoke();

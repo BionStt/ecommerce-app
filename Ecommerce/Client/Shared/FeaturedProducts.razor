@@ -2,14 +2,14 @@
 @implements IDisposable
 
 <center><h2>Top Products of Today</h2></center>
-@if (productService.Products == null || productService.Products.Count == 0)
+@if (productService.products == null || productService.products.Count == 0)
 {
-    <span>@productService.Message</span>
+    <span>@productService.message</span>
 }
 else
 {
     <div class="container">
-        @foreach (var product in productService.Products)
+        @foreach (var product in productService.products)
         {
             @if (product.Featured)
             {

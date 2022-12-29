@@ -3,10 +3,13 @@
 public interface IProductService
 {
     event Action ProductsChanged;
-    List<Product> Products { get; set; }
-    string Message { get; set; }
+    List<Product> products { get; set; }
+    string message { get; set; }
+    int currentPage { get; set; }
+    int pageCount { get; set; }
+    string lastSearchText { get; set; }
     Task GetProducts(string? categoryUrl = null);
     Task<ServiceResponse<Product>> GetProduct(int productId);
-    Task SearchProducts(string searchText);
+    Task SearchProducts(string searchText, int page);
     Task<List<string>> GetProductSearchSuggestion(string searchText);
 }
