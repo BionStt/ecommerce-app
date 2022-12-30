@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.Shared;
 
-public class ProductSearchResultDTO
+public class ProductSearchResult
 {
     public List<Product> Products { get; set; } = new();
     public int Pages { get; set; }

@@ -55,7 +55,7 @@ public class ProductService : IProductService
     public async Task SearchProducts(string searchText, int page)
     {
         lastSearchText = searchText;
-        var result = await _http.GetFromJsonAsync<ServiceResponse<ProductSearchResultDTO>>($"api/product/search/{searchText}/{page}");
+        var result = await _http.GetFromJsonAsync<ServiceResponse<ProductSearchResult>>($"api/product/search/{searchText}/{page}");
         if (result != null && result.Data != null)
         {
             products = result.Data.Products;

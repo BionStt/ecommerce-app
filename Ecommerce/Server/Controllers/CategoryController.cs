@@ -1,24 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Ecommerce.Server.Controllers
+namespace Ecommerce.Server.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CategoryController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CategoryController : ControllerBase
+    private readonly ICategoryService _categoryService;
+
+    public CategoryController(ICategoryService categoryService)
     {
-        private readonly ICategoryService _categoryService;
+        _categoryService = categoryService;
+    }
 
-        public CategoryController(ICategoryService categoryService)
-        {
-            _categoryService = categoryService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<Category>>>> GetCategories()
-        {
-            var result = await _categoryService.GetCategories();
-            return Ok(result);
-        }
+    [HttpGet]
+    public async Task<ActionResult<ServiceResponse<List<Category>>>> GetCategories()
+    {
+        var result = await _categoryService.GetCategories();
+        return Ok(result);
     }
 }
