@@ -1,5 +1,4 @@
 ﻿using Blazored.LocalStorage;
-using Ecommerce.Client.Services.CartService;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace Ecommerce.Client;
@@ -13,5 +12,6 @@ public static class RegisterServices
         builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<ICartService, CartService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
     }
 }
