@@ -20,7 +20,7 @@ public class CartService : ICartService
 
     public async Task AddToCart(CartItem cartItem)
     {
-        if ((await _authStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated)
+        if (await IsUserAuthenticated())
         {
             Console.WriteLine("Auth true");
         }
@@ -28,13 +28,13 @@ public class CartService : ICartService
         {
             Console.WriteLine("Auth false");
         }
-        
+
         List<CartItem>? cart = await GetCartFromLocalStorage();
 
         var sameItem = cart.Find(p => p.ProductId == cartItem.ProductId && p.ProductTypeId == cartItem.ProductTypeId);
         if (sameItem == null)
         {
-        cart.Add(cartItem);
+            cart.Add(cartItem);
         }
         else
         {
@@ -44,7 +44,6 @@ public class CartService : ICartService
         await _localStorage.SetItemAsync("cart", cart);
         OnChange?.Invoke();
     }
-
 
     public async Task<List<CartItem>> GetCartItems()
     {
@@ -119,5 +118,10 @@ public class CartService : ICartService
         {
             await _localStorage.RemoveItemAsync("cart");
         }
+    }
+
+    private async Task<bool> IsUserAuthenticated()
+    {
+        return (await _authStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
     }
 }

@@ -31,5 +31,6 @@ public static class RegisterServices
                     ValidateAudience = false
                 };
             });
+        builder.Services.AddHttpContextAccessor();
     }
 }
