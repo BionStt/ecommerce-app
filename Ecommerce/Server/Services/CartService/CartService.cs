@@ -51,4 +51,13 @@ public class CartService : ICartService
 
         return result;
     }
+
+    public async Task<ServiceResponse<List<CartProductResponse>>> StoreCartItems(List<CartItem> cartItems, int userId)
+    {
+        cartItems.ForEach(ci => ci.UserId = userId);
+        _context.CartItems.AddRange(cartItems);
+        await _context.SaveChangesAsync();
+
+        return await GetCartProducts(await _context.CartItems.Where(ci => ci.UserId == userId).ToListAsync());
+    }
 }
