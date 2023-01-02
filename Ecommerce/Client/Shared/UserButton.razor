@@ -1,4 +1,5 @@
 ﻿@inject ILocalStorageService localStorage
+@inject ICartService cartService
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
 
@@ -40,6 +41,7 @@
     private async Task Logout()
     {
         await localStorage.RemoveItemAsync("authToken");
+        await cartService.GetCartItemsCount();
         await authStateProvider.GetAuthenticationStateAsync();
         navManager.NavigateTo("");
     }
