@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using Ecommerce.Shared;
+using System.Security.Claims;
 
 namespace Ecommerce.Server.Services.CartService;
 
@@ -26,17 +27,17 @@ public class CartService : ICartService
         {
             var product = await _context.Products.Where(p => p.Id == item.ProductId).FirstOrDefaultAsync();
 
-            if(product == null)
+            if (product == null)
             {
                 continue;
             }
 
-             var productVariant = await _context.ProductVariants
-                .Where(v => v.ProductId == item.ProductId && v.ProductTypeId == item.ProductTypeId)
-                .Include(v => v.ProductType)
-                .FirstOrDefaultAsync();
+            var productVariant = await _context.ProductVariants
+               .Where(v => v.ProductId == item.ProductId && v.ProductTypeId == item.ProductTypeId)
+               .Include(v => v.ProductType)
+               .FirstOrDefaultAsync();
 
-            if(productVariant == null)
+            if (productVariant == null)
             {
                 continue;
             }
@@ -79,5 +80,74 @@ public class CartService : ICartService
     public async Task<ServiceResponse<List<CartProductResponse>>> GetDbCartProducts()
     {
         return await GetCartProducts(await _context.CartItems.Where(ci => ci.UserId == GetUserId()).ToListAsync());
+    }
+
+    public async Task<ServiceResponse<bool>> AddToCart(CartItem cartItem)
+    {
+        cartItem.UserId = GetUserId();
+
+        var sameItem = await _context.CartItems
+            .FirstOrDefaultAsync(ci => ci.ProductId == cartItem.ProductId && ci.ProductTypeId == cartItem.ProductTypeId && ci.UserId == cartItem.UserId);
+        if (sameItem == null)
+        {
+            _context.CartItems.Add(cartItem);
+        }
+        else
+        {
+            sameItem.Quantity += cartItem.Quantity;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return new ServiceResponse<bool>
+        {
+            Data = true
+        };
+    }
+
+    public async Task<ServiceResponse<bool>> UpdateQuantity(CartItem cartItem)
+    {
+        var dbCartItem = await _context.CartItems
+            .FirstOrDefaultAsync(ci => ci.ProductId == cartItem.ProductId && ci.ProductTypeId == cartItem.ProductTypeId && ci.UserId == GetUserId());
+        if (dbCartItem == null)
+        {
+            return new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = "Cart item does not exist."
+            };
+        }
+
+        dbCartItem.Quantity = cartItem.Quantity;
+        await _context.SaveChangesAsync();
+
+        return new ServiceResponse<bool>
+        {
+            Data = true
+        };
+    }
+
+    public async Task<ServiceResponse<bool>> RemoveItemFromCart(int productId, int productTypeId)
+    {
+        var dbCartItem = await _context.CartItems
+            .FirstOrDefaultAsync(ci => ci.ProductId == productId && ci.ProductTypeId == productTypeId && ci.UserId == GetUserId());
+        if (dbCartItem == null)
+        {
+            return new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = "Cart item does not exist."
+            };
+        }
+
+        _context.CartItems.Remove(dbCartItem);
+        await _context.SaveChangesAsync();
+
+        return new ServiceResponse<bool>
+        {
+            Data = true
+        };
     }
 }
