@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>cad58f02-4e29-4c77-b798-7ad775c09ac2</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,10 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\Ecommerce.Client.csproj" />
     <ProjectReference Include="..\Shared\Ecommerce.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\PaymentService\" />
   </ItemGroup>
 
 

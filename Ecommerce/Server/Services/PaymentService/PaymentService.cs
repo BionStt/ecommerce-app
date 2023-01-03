@@ -8,6 +8,7 @@ public class PaymentService : IPaymentService
     private readonly ICartService _cartService;
     private readonly IAuthService _authService;
     private readonly IOrderService _orderService;
+    private string _secret;
 
     public PaymentService(IConfiguration configuration, ICartService cartService, IAuthService authService, IOrderService orderService)
     {
@@ -17,6 +18,8 @@ public class PaymentService : IPaymentService
         _orderService = orderService;
 
         StripeConfiguration.ApiKey = _configuration.GetSection("Stripe:API").Value;
+        _secret = _configuration.GetSection("Stripe:Webhook").Value;
+
     }
     
     public async Task<Session> CreateCheckoutSession()
@@ -57,5 +60,35 @@ public class PaymentService : IPaymentService
         var service = new SessionService();
         Session session = service.Create(options);
         return session;
+    }
+
+    public async Task<ServiceResponse<bool>> FullfillOrder(HttpRequest request)
+    {
+        var json = await new StreamReader(request.Body).ReadToEndAsync();
+        try 
+        {
+            var stripEvent = EventUtility.ConstructEvent(json, request.Headers["Stripe-Signature"], _secret);
+
+            if (stripEvent.Type == Events.CheckoutSessionCompleted)
+            {
+                var session = stripEvent.Data.Object as Session;
+                var user = await _authService.GetUserByEmail(session.CustomerEmail);
+                await _orderService.PlaceOrder(user.Id);
+            }
+
+            return new ServiceResponse<bool>
+            {
+                Data = true,
+            };
+        }
+        catch (StripeException ex)
+        {
+            return new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = ex.Message
+            };
+        }
     }
 }
