@@ -20,6 +20,7 @@ public class AuthService : IAuthService
     }
 
     public int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+    public string GetUserEmail() => _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
     public async Task<ServiceResponse<string>> Login(string email, string password)
     {
@@ -139,5 +140,10 @@ public class AuthService : IAuthService
             Data = false,
             Message = "Password has been changed."
         };
+    }
+
+    public async Task<User> GetUserByEmail(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
     }
 }
