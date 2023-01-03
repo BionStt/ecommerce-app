@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using Ecommerce.Shared;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using System.Collections.Generic;
 
 namespace Ecommerce.Server.Services.OrderService;
 
@@ -13,6 +15,46 @@ public class OrderService : IOrderService
         _context = context;
         _cartService = cartService;
         _authService = authService;
+    }
+
+    public async Task<ServiceResponse<OrderDetailsResponse>> GetOrderDetails(int orderId)
+    {
+        var response = new ServiceResponse<OrderDetailsResponse>();
+        var order = await _context.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.ProductType)
+            .Where(o => o.UserId == _authService.GetUserId() && o.Id == orderId)
+            .OrderByDescending(o => o.OrderDate)
+            .FirstOrDefaultAsync();
+
+        if (order == null)
+        {
+            response.Success = false;
+            response.Message = "Order not found.";
+            return response;
+        }
+
+        var orderDetailsResponse = new OrderDetailsResponse
+        {
+            OrderDate = order.OrderDate,
+            TotalPrice = order.TotalPrice,
+            Products = new List<OrderDetailsProductResponse>()
+        };
+
+        order.OrderItems.ForEach(i => orderDetailsResponse.Products.Add(new OrderDetailsProductResponse
+        {
+            ProductId = i.ProductId,
+            ImageUrl = i.Product.ImageUrl,
+            ProductType = i.ProductType.Name,
+            Quantity = i.Quantity,
+            Title = i.Product.Title,
+            TotalPrice = i.TotalPrice
+        }));
+
+        response.Data = orderDetailsResponse;
+        return response;
     }
 
     public async Task<ServiceResponse<List<OrderOverviewResponse>>> GetOrders()
