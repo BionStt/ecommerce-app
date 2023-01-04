@@ -17,7 +17,7 @@ public class CategoryService : ICategoryService
         return await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
     }
 
-    public async Task<ServiceResponse<List<Category>>> AddCategories(Category category)
+    public async Task<ServiceResponse<List<Category>>> AddCategory(Category category)
     {
         category.Editing = category.IsNew = false;
         _context.Add(category);
@@ -25,7 +25,7 @@ public class CategoryService : ICategoryService
         return await GetAdminCategories();
     }
 
-    public async Task<ServiceResponse<List<Category>>> DeleteCategories(int categoryId)
+    public async Task<ServiceResponse<List<Category>>> DeleteCategory(int categoryId)
     {
         Category category = await GetCategoryById(categoryId);
         if (category == null)
@@ -66,7 +66,7 @@ public class CategoryService : ICategoryService
         };
     }
 
-    public async Task<ServiceResponse<List<Category>>> UpdateCategories(Category category)
+    public async Task<ServiceResponse<List<Category>>> UpdateCategory(Category category)
     {
         var dbCategory = await GetCategoryById(category.Id);
         if (dbCategory == null)
