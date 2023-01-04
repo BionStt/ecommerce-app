@@ -1,6 +1,4 @@
-﻿using static System.Net.WebRequestMethods;
-
-namespace Ecommerce.Client.Services.ProductService;
+﻿namespace Ecommerce.Client.Services.ProductService;
 
 public class ProductService : IProductService
 {
