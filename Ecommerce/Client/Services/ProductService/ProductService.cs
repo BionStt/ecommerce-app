@@ -1,6 +1,4 @@
-﻿using static System.Net.WebRequestMethods;
-
-namespace Ecommerce.Client.Services.ProductService;
+﻿namespace Ecommerce.Client.Services.ProductService;
 
 public class ProductService : IProductService
 {
@@ -11,13 +9,14 @@ public class ProductService : IProductService
         _http = http;
     }
     
-    public List<Product> products { get; set; } = new();
-    public string message { get; set; } = "Loading products...";
+    public List<Product> Products { get; set; } = new();
+    public string Message { get; set; } = "Loading products...";
 
     public event Action ProductsChanged;
-    public int currentPage { get; set; } = 1;
-    public int pageCount { get; set; } = 0;
-    public string lastSearchText { get; set; } = string.Empty;
+    public int CurrentPage { get; set; } = 1;
+    public int PageCount { get; set; } = 0;
+    public string LastSearchText { get; set; } = string.Empty;
+    public List<Product> AdminProducts { get; set; }
 
     public async Task<ServiceResponse<Product>> GetProduct(int productId)
     {
@@ -32,15 +31,15 @@ public class ProductService : IProductService
             await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/category/{categoryUrl}");
         if (result != null && result.Data != null)
         {
-            products = result.Data;
+            Products = result.Data;
         }
 
-        currentPage = 1;
-        pageCount = 0;
+        CurrentPage = 1;
+        PageCount = 0;
 
-        if (products.Count == 0)
+        if (Products.Count == 0)
         {
-            message = "No products found";
+            Message = "No products found";
         }
 
         ProductsChanged.Invoke();
@@ -54,19 +53,50 @@ public class ProductService : IProductService
 
     public async Task SearchProducts(string searchText, int page)
     {
-        lastSearchText = searchText;
+        LastSearchText = searchText;
         var result = await _http.GetFromJsonAsync<ServiceResponse<ProductSearchResult>>($"api/product/search/{searchText}/{page}");
         if (result != null && result.Data != null)
         {
-            products = result.Data.Products;
-            currentPage = result.Data.CurrentPage;
-            pageCount = result.Data.Pages;
+            Products = result.Data.Products;
+            CurrentPage = result.Data.CurrentPage;
+            PageCount = result.Data.Pages;
         }           
-        if (products.Count == 0)
+        if (Products.Count == 0)
         {
-            message = "No products found.";
+            Message = "No products found.";
         }    
         
         ProductsChanged.Invoke();
+    }
+
+    public async Task GetAdminProducts()
+    {
+        var result = await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product/admin");
+        AdminProducts = result.Data;
+        CurrentPage = 1;
+        PageCount = 0;
+        if (AdminProducts.Count == 0)
+        {
+            Message = "No products found.";
+        }
+    }
+
+    public async Task<Product> CreateProduct(Product product)
+    {
+        var result = await _http.PostAsJsonAsync("api/product/admin", product);
+        var newProduct = (await result.Content.ReadFromJsonAsync<ServiceResponse<Product>>()).Data;
+        return newProduct;
+    }
+
+    public async Task<Product> UpdateProduct(Product product)
+    {
+        var result = await _http.PutAsJsonAsync($"api/product/admin", product);
+        var content = await result.Content.ReadFromJsonAsync<ServiceResponse<Product>>();
+        return content.Data;
+    }
+
+    public async Task DeleteProduct(Product product)
+    {
+        var result = await _http.DeleteAsync($"api/product/admin/{product.Id}");
     }
 }
