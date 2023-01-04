@@ -28,7 +28,7 @@ public class CategoryController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("admin"), Authorize(Roles = "Admin")]
+    [HttpDelete("admin/{categoryId}"), Authorize(Roles = "Admin")]
     public async Task<ActionResult<ServiceResponse<List<Category>>>> DeleteCategory(int categoryId)
     {
         var result = await _categoryService.DeleteCategory(categoryId);
@@ -36,9 +36,16 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost("admin"), Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ServiceResponse<List<Category>>>> AddCategory()
+    public async Task<ActionResult<ServiceResponse<List<Category>>>> AddCategory(Category category)
     {
-        var result = await _categoryService.AddCategories();
+        var result = await _categoryService.AddCategory(category);
+        return Ok(result);
+    }
+
+    [HttpPut("admin"), Authorize(Roles = "Admin")]
+    public async Task<ActionResult<ServiceResponse<List<Category>>>> UpdateCategory(Category category)
+    {
+        var result = await _categoryService.UpdateCategory(category);
         return Ok(result);
     }
 }
