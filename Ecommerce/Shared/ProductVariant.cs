@@ -20,5 +20,13 @@ public class ProductVariant
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal OriginalPrice { get; set; }
+    public bool Visible { get; set; } = true;
+    public bool Deleted { get; set; } = false;
+
+    // columns won't be mapped to the database
+    [NotMapped]
+    public bool Editing { get; set; } = false;
+    [NotMapped]
+    public bool IsNew { get; set; } = false;
 }
 

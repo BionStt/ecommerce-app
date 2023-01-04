@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Server.Controllers;
 
@@ -17,6 +18,13 @@ public class ProductController : ControllerBase
     public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProducts()
     {
         var result = await _productService.GetProducts();
+        return Ok(result);
+    }
+
+    [HttpGet("admin"), Authorize(Roles = "Admin")]
+    public async Task<ActionResult<ServiceResponse<List<Product>>>> GetAdminProducts()
+    {
+        var result = await _productService.GetAdminProducts();
         return Ok(result);
     }
 
