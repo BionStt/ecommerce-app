@@ -1,5 +1,6 @@
 ﻿global using Ecommerce.Server;
 global using Ecommerce.Server.Data;
+global using Ecommerce.Server.Services.AddressService;
 global using Ecommerce.Server.Services.AuthService;
 global using Ecommerce.Server.Services.CartService;
 global using Ecommerce.Server.Services.CategoryService;
