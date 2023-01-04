@@ -82,4 +82,23 @@ public class ProductService : IProductService
             Message = "No products found.";
         }
     }
+
+    public async Task<Product> CreateProduct(Product product)
+    {
+        var result = await _http.PostAsJsonAsync("api/product/admin", product);
+        var newProduct = (await result.Content.ReadFromJsonAsync<ServiceResponse<Product>>()).Data;
+        return newProduct;
+    }
+
+    public async Task<Product> UpdateProduct(Product product)
+    {
+        var result = await _http.PutAsJsonAsync($"api/product/admin", product);
+        var content = await result.Content.ReadFromJsonAsync<ServiceResponse<Product>>();
+        return content.Data;
+    }
+
+    public async Task DeleteProduct(Product product)
+    {
+        var result = await _http.DeleteAsync($"api/product/admin/{product.Id}");
+    }
 }
