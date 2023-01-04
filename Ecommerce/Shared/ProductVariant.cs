@@ -10,9 +10,9 @@ public class ProductVariant
     // JsonIgnore prevents a circular reference because 
     // Product will not be filled when a ProductVariant will be recived  
     [JsonIgnore]
-    public Product Product { get; set; }
+    public Product? Product { get; set; }
     public int ProductId { get; set; }
-    public ProductType ProductType { get; set; }
+    public ProductType? ProductType { get; set; }
     public int ProductTypeId { get; set; }
 
     [Column(TypeName ="decimal(18,2)")]
@@ -20,5 +20,13 @@ public class ProductVariant
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal OriginalPrice { get; set; }
+    public bool Visible { get; set; } = true;
+    public bool Deleted { get; set; } = false;
+
+    // columns won't be mapped to the database
+    [NotMapped]
+    public bool Editing { get; set; } = false;
+    [NotMapped]
+    public bool IsNew { get; set; } = false;
 }
 

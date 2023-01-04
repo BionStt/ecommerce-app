@@ -7,6 +7,7 @@ global using Ecommerce.Server.Services.CategoryService;
 global using Ecommerce.Server.Services.OrderService;
 global using Ecommerce.Server.Services.PaymentService;
 global using Ecommerce.Server.Services.ProductService;
+global using Ecommerce.Server.Services.ProductTypeService;
 global using Ecommerce.Shared;
 global using Microsoft.EntityFrameworkCore;
 global using Stripe.Checkout;
