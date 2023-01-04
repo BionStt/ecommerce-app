@@ -24,7 +24,7 @@ public class CategoryService : ICategoryService
         OnChange.Invoke();
     }
 
-    public async Category CreateNewCategory()
+    public Category CreateNewCategory()
     {
         var newCategory = new Category
         {
