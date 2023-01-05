@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
 
 namespace Ecommerce.Client;
 
@@ -20,5 +21,6 @@ public static class RegisterServices
         builder.Services.AddOptions();
         builder.Services.AddAuthorizationCore();
         builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+        builder.Services.AddMudServices();
     }
 }
