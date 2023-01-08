@@ -6,6 +6,16 @@ Finished: 05.01.23
 
 <br>
 
+## Pictures
+
+![](https://i.imgur.com/ziX0Nad.png)
+![](https://i.imgur.com/QnuX2lJ.png)
+![](https://i.imgur.com/GtpTaqy.png)
+![](https://i.imgur.com/Il84bDC.png)
+![](https://i.imgur.com/AGfQTkG.png)
+
+<br>
+
 ## Tech Stack
 
  - Blazor Web Assembly (.NET 6)
